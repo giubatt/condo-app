@@ -1,13 +1,7 @@
 import { User, UserDocument } from '../models/user'
 import { Types } from 'mongoose'
 
-export const create = async ({
-  email,
-  password,
-}: {
-  email: string
-  password: string
-}): Promise<UserDocument> => {
+export const create = async ({ email, password }: { email: string; password: string }): Promise<UserDocument> => {
   const user = await User.create({
     email,
     password,
@@ -35,23 +29,8 @@ export const update = async ({
   return user.toObject()
 }
 
-export const findById = async (
-  id: Types.ObjectId,
-): Promise<UserDocument | null> => {
+export const findById = async (id: Types.ObjectId): Promise<UserDocument | null> => {
   const user = await User.findById(id)
 
   return user?.toObject()
-}
-
-export const checkPassword = async ({
-  email,
-  password,
-}: {
-  email: string
-  password: string
-}): Promise<boolean> => {
-  const user = await User.findOne({ email })
-  if (!user) return false
-
-  return user.comparePassword(password)
 }

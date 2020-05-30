@@ -47,6 +47,16 @@ describe(`create`, () => {
 })
 
 describe(`update`, () => {
+  test(`throws error if user not found`, async () => {
+    // Act
+    const actual = UserController.update({ id: mongoose.Types.ObjectId() })
+
+    // Assert
+    await expect(actual).rejects.toThrowErrorMatchingInlineSnapshot(
+      `"UserNotFound"`,
+    )
+  })
+
   test(`update user email`, async () => {
     // Arrange
     const user = await User.create({
@@ -112,51 +122,5 @@ describe(`findById`, () => {
 
     // Assert
     expect(actual).toBeUndefined()
-  })
-})
-
-describe(`checkPassword`, () => {
-  test(`returns true on correct password`, async () => {
-    // Arrange
-    const info = {
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-    }
-    await User.create(info)
-
-    // Act
-    const actual = await UserController.checkPassword(info)
-
-    // Assert
-    expect(actual).toBe(true)
-  })
-
-  test(`returns false on incorrect password`, async () => {
-    // Arrange
-    const info = {
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-    }
-    await User.create(info)
-
-    // Act
-    const actual = await UserController.checkPassword({
-      email: info.email,
-      password: faker.internet.password(),
-    })
-
-    // Assert
-    expect(actual).toBe(false)
-  })
-
-  test(`returns false on inexistent user`, async () => {
-    // Act
-    const actual = await UserController.checkPassword({
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-    })
-
-    // Assert
-    expect(actual).toBe(false)
   })
 })
