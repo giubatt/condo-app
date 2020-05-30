@@ -19,4 +19,4 @@ const tentantSchema = new mongoose.Schema(
   { timestamps: true },
 )
 
-export const Tentant = mongoose.model<TentantDocument>('Tentant', tentantSchema)
+export const Tentant = mongoose.model<TentantDocument>(`Tentant`, tentantSchema)

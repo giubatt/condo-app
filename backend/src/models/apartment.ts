@@ -16,7 +16,7 @@ const apartmentSchema = new mongoose.Schema(
         type: String,
         tentant: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'Tenant',
+          ref: `Tenant`,
         },
       },
     ],
@@ -25,6 +25,6 @@ const apartmentSchema = new mongoose.Schema(
 )
 
 export const Apartment = mongoose.model<ApartmentDocument>(
-  'Apartment',
+  `Apartment`,
   apartmentSchema,
 )
