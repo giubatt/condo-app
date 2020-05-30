@@ -1,5 +1,7 @@
 import { ApolloServer } from 'apollo-server-express'
 import { schema } from './schemas'
+import { decodeToken } from '../controllers/auth'
+import { findById } from '../controllers/user'
 
 export const graphqlServer = new ApolloServer({
   schema,
@@ -12,9 +14,10 @@ export const graphqlServer = new ApolloServer({
     let user
     if (token) {
       try {
-        // user = await verifyToken({ token })
+        const { id } = await decodeToken(token)
+        user = await findById(id)
       } catch (error) {
-        // console.error(error)
+        console.error(error)
       }
     }
 
