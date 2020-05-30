@@ -5,51 +5,37 @@ export type UserDocument = mongoose.Document & {
   email: string
   password: string
 
-  tokens: AuthToken[]
+  tokens: string[]
 
-  comparePassword: comparePasswordFunction
-}
-
-type comparePasswordFunction = (password: string) => void
-
-export interface AuthToken {
-  accessToken: string
-  kind: string
+  comparePassword: (password: string) => boolean
 }
 
 const userSchema = new mongoose.Schema(
   {
     email: { type: String, unique: true },
-    password: String,
+    password: { type: String, required: true },
 
-    tokens: Array,
+    tokens: [String],
   },
   { timestamps: true },
 )
 
-/**
- * Password hash middleware.
- */
-userSchema.pre('save', async function save(next) {
+userSchema.pre(`save`, async function save(next) {
   const user = this as UserDocument
 
-  if (!user.isModified('password')) {
+  if (!user.isModified(`password`)) {
     return next()
   }
 
-  try {
-    const hash = await bcrypt.hash(user.password, 10)
-    user.password = hash
-    next()
-  } catch (error) {
-    next(error)
-  }
+  const hash = await bcrypt.hash(user.password, 10)
+  user.password = hash
+  next()
 })
 
-const comparePassword: comparePasswordFunction = async function (password) {
+const comparePassword = async function (password: string) {
   return bcrypt.compare(password, this.password)
 }
 
 userSchema.methods.comparePassword = comparePassword
 
-export const User = mongoose.model<UserDocument>('User', userSchema)
+export const User = mongoose.model<UserDocument>(`User`, userSchema)
