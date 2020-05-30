@@ -6,3 +6,4 @@ coverage/*
 **/*.d.ts
 # custom definition files
 /src/types/
+jest.config.js
