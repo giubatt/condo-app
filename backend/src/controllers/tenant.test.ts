@@ -1,8 +1,8 @@
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
-import faker from 'faker'
 import * as TenantController from './tenant'
 import { Tenant } from '../models/tenant'
+import { createFakeTenant } from '../tests/utils'
 
 const mongod = new MongoMemoryServer()
 
@@ -27,18 +27,10 @@ afterAll(async (done) => {
   done()
 })
 
-const fakeTenant = () => ({
-  cpf: faker.random.number({ min: 10000000000, max: 99999999999 }).toString(),
-  email: faker.internet.email(),
-  name: faker.name.findName(),
-  dateOfBirth: faker.date.past(30),
-  phone: faker.lorem.word(),
-})
-
 describe(`create`, () => {
   test(`creates tenant`, async () => {
     // Arrange
-    const data = fakeTenant()
+    const data = createFakeTenant()
 
     // Act
     const actual = await TenantController.create(data)
@@ -61,9 +53,9 @@ describe(`update`, () => {
     `update %s`,
     async (key: `cpf` | `email` | `name` | `dateOfBirth` | `phone`) => {
       // Arrange
-      const tenant = await Tenant.create(fakeTenant())
+      const tenant = await Tenant.create(createFakeTenant())
       const data = {
-        [key]: fakeTenant()[key],
+        [key]: createFakeTenant()[key],
       }
 
       // Act
@@ -78,7 +70,7 @@ describe(`update`, () => {
 describe(`findById`, () => {
   test(`tenant is returned`, async () => {
     // Arrange
-    const expected = await Tenant.create(fakeTenant())
+    const expected = await Tenant.create(createFakeTenant())
 
     // Act
     const actual = await TenantController.findById(expected.id)

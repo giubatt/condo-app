@@ -12,7 +12,6 @@
     "@typescript-eslint/eslint-plugin"
   ],
   "extends": [
-    "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "eslint-config-prettier",
@@ -24,6 +23,12 @@
     "quotes": [
       "error",
       "backtick"
+    ],
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_"
+      }
     ]
   }
 }

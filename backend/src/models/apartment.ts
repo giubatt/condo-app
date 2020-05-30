@@ -11,14 +11,6 @@ export type ApartmentDocument = mongoose.Document & {
   ]
 }
 
-const apartmentTenantSchema = new mongoose.Schema({
-  primary: Boolean,
-  tenant: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: `Tenant`,
-  },
-})
-
 const apartmentSchema = new mongoose.Schema(
   {
     number: {
@@ -29,7 +21,19 @@ const apartmentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    tenants: [apartmentTenantSchema],
+    tenants: [
+      {
+        primary: {
+          type: Boolean,
+          default: false,
+        },
+        tenant: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: `Tenant`,
+          required: true,
+        },
+      },
+    ],
   },
   { timestamps: true },
 )

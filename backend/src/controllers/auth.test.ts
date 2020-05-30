@@ -75,7 +75,6 @@ describe(`login`, () => {
 
 describe(`decodeToken`, () => {
   test(`throws error on invalid token`, async () => {
-    // Act
     // Assert
     expect(() => AuthController.decodeToken(`invalid_token`)).toThrowErrorMatchingInlineSnapshot(`"InvalidToken"`)
   })

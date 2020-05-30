@@ -5,8 +5,6 @@ export type UserDocument = mongoose.Document & {
   email: string
   password: string
 
-  tokens: string[]
-
   comparePassword: (password: string) => boolean
 }
 

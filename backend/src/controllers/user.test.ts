@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 import faker from 'faker'
 import * as UserController from './user'
 import { User } from '../models/user'
+import { createFakeUser } from '../tests/utils'
 
 const mongod = new MongoMemoryServer()
 
@@ -30,10 +31,7 @@ afterAll(async (done) => {
 describe(`create`, () => {
   test(`creates user`, async () => {
     // Arrange
-    const data = {
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-    }
+    const data = createFakeUser()
 
     // Act
     const actual = await UserController.create(data)
@@ -57,10 +55,7 @@ describe(`update`, () => {
 
   test(`update user email`, async () => {
     // Arrange
-    const user = await User.create({
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-    })
+    const user = await User.create(createFakeUser())
 
     const data = {
       email: faker.internet.email(),
@@ -78,10 +73,7 @@ describe(`update`, () => {
 
   test(`update user password`, async () => {
     // Arrange
-    const user = await User.create({
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-    })
+    const user = await User.create(createFakeUser())
 
     const data = {
       password: faker.internet.password(),
@@ -101,10 +93,7 @@ describe(`update`, () => {
 describe(`findById`, () => {
   test(`user is returned`, async () => {
     // Arrange
-    const user = await User.create({
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-    })
+    const user = await User.create(createFakeUser())
 
     // Act
     const actual = await UserController.findById(user.id)
