@@ -9,10 +9,7 @@ import { Request, Response } from 'express'
 // authorization headers, which is gonna be like all the requests we do in our
 // tests. This wrapper allows some headers to be passed in. See:
 // https://github.com/apollographql/apollo-server/issues/2277
-export const createApolloTestClient = (
-  server: ApolloServer,
-  headers = {},
-): ApolloServerTestClient => {
+export const createApolloTestClient = (server: ApolloServer, headers = {}): ApolloServerTestClient => {
   // @ts-ignore B/c context is marked as private.
   const oldContext = server.context
 

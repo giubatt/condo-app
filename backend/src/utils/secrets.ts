@@ -15,8 +15,6 @@ if (!JWT_SECRET) {
 }
 
 if (!MONGODB_URI) {
-  logger.error(
-    `No mongo connection string. Set BACKEND_MONGODB_URI environment variable.`,
-  )
+  logger.error(`No mongo connection string. Set BACKEND_MONGODB_URI environment variable.`)
   process.exit(1)
 }

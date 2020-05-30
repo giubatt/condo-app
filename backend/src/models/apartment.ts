@@ -24,7 +24,4 @@ const apartmentSchema = new mongoose.Schema(
   { timestamps: true },
 )
 
-export const Apartment = mongoose.model<ApartmentDocument>(
-  `Apartment`,
-  apartmentSchema,
-)
+export const Apartment = mongoose.model<ApartmentDocument>(`Apartment`, apartmentSchema)
