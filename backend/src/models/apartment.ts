@@ -1,25 +1,35 @@
 import mongoose from 'mongoose'
-import { TentantDocument } from './tentant'
 
 export type ApartmentDocument = mongoose.Document & {
   number: number
   block: string
-  tentants: [TentantDocument]
+  tenants: [
+    {
+      primary: boolean
+      tenant: mongoose.Types.ObjectId
+    },
+  ]
 }
+
+const apartmentTenantSchema = new mongoose.Schema({
+  primary: Boolean,
+  tenant: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: `Tenant`,
+  },
+})
 
 const apartmentSchema = new mongoose.Schema(
   {
-    number: Number,
-    block: String,
-    tentants: [
-      {
-        type: String,
-        tentant: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: `Tenant`,
-        },
-      },
-    ],
+    number: {
+      type: Number,
+      required: true,
+    },
+    block: {
+      type: String,
+      required: true,
+    },
+    tenants: [apartmentTenantSchema],
   },
   { timestamps: true },
 )
