@@ -52,9 +52,7 @@ describe(`update`, () => {
     const actual = UserController.update({ id: mongoose.Types.ObjectId() })
 
     // Assert
-    await expect(actual).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"UserNotFound"`,
-    )
+    await expect(actual).rejects.toThrowErrorMatchingInlineSnapshot(`"UserNotFound"`)
   })
 
   test(`update user email`, async () => {
@@ -98,18 +96,17 @@ describe(`update`, () => {
     expect(actual.password).not.toEqual(user.password)
     expect(passwordMatches).toBe(true)
   })
-
-  test
 })
 
 describe(`findById`, () => {
   test(`user is returned`, async () => {
-    // Act
+    // Arrange
     const user = await User.create({
       email: faker.internet.email(),
       password: faker.internet.password(),
     })
 
+    // Act
     const actual = await UserController.findById(user.id)
 
     // Assert
