@@ -1,8 +1,9 @@
 import { MongoMemoryServer } from 'mongodb-memory-server'
-import mongoose from 'mongoose'
-import faker from 'faker'
+import mongoose, { Types } from 'mongoose'
 import * as ApartmentController from './apartment'
 import { Apartment } from '../models/apartment'
+import { Tenant } from '../models/tenant'
+import { createFakeTenant, createFakeApartment } from '../tests/utils'
 
 const mongod = new MongoMemoryServer()
 
@@ -30,10 +31,7 @@ afterAll(async (done) => {
 describe(`create`, () => {
   test(`creates apartment`, async () => {
     // Arrange
-    const data = {
-      number: faker.random.number({ min: 1, max: 200 }),
-      block: faker.random.alphaNumeric(2),
-    }
+    const data = createFakeApartment()
 
     // Act
     const actual = await ApartmentController.create(data)
@@ -54,13 +52,10 @@ describe(`update`, () => {
 
   test(`update apartment number`, async () => {
     // Arrange
-    const apartment = await Apartment.create({
-      number: faker.random.number({ min: 1, max: 200 }),
-      block: faker.random.alphaNumeric(2),
-    })
+    const apartment = await Apartment.create(createFakeApartment())
 
     const data = {
-      number: faker.random.number({ min: 1, max: 200 }),
+      number: createFakeApartment().number,
     }
 
     // Act
@@ -72,13 +67,10 @@ describe(`update`, () => {
 
   test(`update apartment block`, async () => {
     // Arrange
-    const apartment = await Apartment.create({
-      number: faker.random.number({ min: 1, max: 200 }),
-      block: faker.random.alphaNumeric(2),
-    })
+    const apartment = await Apartment.create(createFakeApartment())
 
     const data = {
-      block: faker.random.alphaNumeric(2),
+      block: createFakeApartment().block,
     }
 
     // Act
@@ -92,16 +84,46 @@ describe(`update`, () => {
 describe(`findById`, () => {
   test(`apartment is returned`, async () => {
     // Arrange
-    const expected = await Apartment.create({
-      number: faker.random.number({ min: 1, max: 200 }),
-      block: faker.random.alphaNumeric(2),
-    })
+    const expected = await Apartment.create(createFakeApartment())
 
     // Act
     const actual = await ApartmentController.findById(expected.id)
 
     // Assert
     expect(actual).toMatchObject(expected.toObject())
+  })
+
+  test(`apartment is returned with tenants populated`, async () => {
+    // Arrange
+    const tenants = await Tenant.create(Array(3).fill(``).map(createFakeTenant))
+
+    const apartment = await Apartment.create({
+      ...createFakeApartment(),
+      tenants: [
+        {
+          primary: true,
+          tenant: tenants[0].id,
+        },
+        {
+          tenant: tenants[1].id,
+        },
+        {
+          tenant: tenants[2].id,
+        },
+      ],
+    })
+
+    const expected = apartment.toObject()
+    expected.tenants = expected.tenants.map((item: { primary: boolean; tenant: Types.ObjectId }) => ({
+      primary: item.primary,
+      tenant: tenants.find(({ id }) => id === item.tenant.toHexString()).toObject(),
+    }))
+
+    // Act
+    const actual = await ApartmentController.findById(apartment.id)
+
+    // Assert
+    expect(actual).toMatchObject(expected)
   })
 
   test(`undefined if apartment doesn't exist`, async () => {
