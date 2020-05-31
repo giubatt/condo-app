@@ -3,12 +3,7 @@ import mongoose from 'mongoose'
 export type ApartmentDocument = mongoose.Document & {
   number: number
   block: string
-  tenants: [
-    {
-      primary: boolean
-      tenant: mongoose.Types.ObjectId
-    },
-  ]
+  tenants: mongoose.Types.ObjectId[]
 }
 
 const apartmentSchema = new mongoose.Schema(

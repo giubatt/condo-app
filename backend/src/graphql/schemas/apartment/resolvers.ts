@@ -1,6 +1,6 @@
 import { AuthenticationError } from 'apollo-server-express'
 import { Types } from 'mongoose'
-import { create, update, findById, find } from '../../../controllers/apartment'
+import * as ApartmentController from '../../../controllers/apartment'
 import { ApartmentDocument } from '../../../models/apartment'
 import { UserDocument } from '../../../models/user'
 
@@ -13,7 +13,7 @@ export const resolvers = {
     ): Promise<ApartmentDocument | null> {
       if (!user) throw new AuthenticationError(``)
 
-      return await create({ number, block })
+      return await ApartmentController.create({ number, block })
     },
 
     async updateApartment(
@@ -23,7 +23,17 @@ export const resolvers = {
     ): Promise<ApartmentDocument | null> {
       if (!user) throw new AuthenticationError(``)
 
-      return await update({ id, number, block })
+      return await ApartmentController.update({ id, number, block })
+    },
+
+    async removeApartment(
+      _parent: undefined,
+      { id }: { id: Types.ObjectId },
+      { user }: { user: UserDocument },
+    ): Promise<boolean> {
+      if (!user) throw new AuthenticationError(``)
+
+      return await ApartmentController.remove(id)
     },
   },
 
@@ -35,7 +45,7 @@ export const resolvers = {
     ): Promise<ApartmentDocument | null> {
       if (!user) throw new AuthenticationError(``)
 
-      return await findById(id)
+      return await ApartmentController.findById(id)
     },
 
     async getApartments(
@@ -45,7 +55,7 @@ export const resolvers = {
     ): Promise<ApartmentDocument[] | null> {
       if (!user) throw new AuthenticationError(``)
 
-      return await find()
+      return await ApartmentController.find()
     },
   },
 

@@ -10,6 +10,7 @@ export const typeDefs = gql`
   extend type Mutation {
     createApartment(number: Int!, block: String): Apartment
     updateApartment(id: ID!, number: Int, block: String): Apartment
+    removeApartment(id: ID!): Boolean
   }
 
   extend type Query {

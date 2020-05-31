@@ -4,9 +4,10 @@ import { createApolloTestClient } from '../../../tests/apolloServerTest'
 import { graphqlServer } from '../../server'
 import gql from 'graphql-tag'
 import mongoose from 'mongoose'
-import { createFakeUser, createFakeApartment } from '../../../tests/utils'
+import { createFakeUser, createFakeApartment, createFakeTenant } from '../../../tests/utils'
 import * as UserController from '../../../controllers/user'
 import { Apartment } from '../../../models/apartment'
+import { Tenant } from '../../../models/tenant'
 
 const mongod = new MongoMemoryServer()
 
@@ -142,6 +143,64 @@ describe(`Mutation`, () => {
       // Assert
       expect(errors).toBeUndefined()
       expect(data.updateApartment).toMatchObject(updateData)
+    })
+  })
+
+  describe(`removeApartment`, () => {
+    const REMOVE_APARTMENT = gql`
+      mutation RemoveApartment($id: ID!) {
+        removeApartment(id: $id)
+      }
+    `
+
+    test(`error when unauthorized`, async () => {
+      // Act
+      const { mutate } = createApolloTestClient(graphqlServer)
+      const { data, errors } = await mutate({
+        mutation: REMOVE_APARTMENT,
+        variables: {
+          id: mongoose.Types.ObjectId().toHexString(),
+        },
+      })
+
+      // Assert
+      expect(errors[0].extensions).toMatchInlineSnapshot(`
+        Object {
+          "code": "UNAUTHENTICATED",
+        }
+      `)
+      expect(data.removeApartment).toBeNull()
+    })
+
+    test(`apartment and it's tenants are removed`, async () => {
+      // Arrange
+      const apartment = await Apartment.create(createFakeApartment())
+
+      const tenants = Array(10)
+        .fill(``)
+        .map(() => ({ ...createFakeTenant(), apartmentId: apartment.id }))
+      const tenantsIds = (await Promise.all(tenants.map((tenant) => Tenant.create(tenant)))).map(
+        ({ id }) => id,
+      ) as mongoose.Types.ObjectId[]
+
+      apartment.tenants = tenantsIds
+      await apartment.save()
+
+      // Act
+      const { data, errors } = await mutate({
+        mutation: REMOVE_APARTMENT,
+        variables: { id: apartment.id },
+      })
+
+      // Assert
+      const actualApartment = await Apartment.findById(apartment.id)
+      const actualTenants = await Tenant.find({ apartmentId: apartment.id })
+
+      expect(errors).toBeUndefined()
+      expect(data.removeApartment).toBe(true)
+
+      expect(actualApartment).toBeNull()
+      expect(actualTenants.length).toBe(0)
     })
   })
 })

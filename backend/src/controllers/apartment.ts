@@ -1,4 +1,5 @@
 import { Apartment, ApartmentDocument } from '../models/apartment'
+import { Tenant } from '../models/tenant'
 import { Types } from 'mongoose'
 
 export const create = async ({ number, block }: { number: number; block: string }): Promise<ApartmentDocument> => {
@@ -39,4 +40,13 @@ export const find = async (): Promise<ApartmentDocument[] | null> => {
   const apartments = await Apartment.find()
 
   return apartments
+}
+
+export const remove = async (id: Types.ObjectId): Promise<boolean> => {
+  const apartment = await Apartment.findById(id)
+  if (!apartment) throw new Error(`ApartmentNotFound`)
+
+  await Tenant.deleteMany({ _id: { $in: apartment.tenants } })
+  await Apartment.deleteOne({ _id: id })
+  return true
 }

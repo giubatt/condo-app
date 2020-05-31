@@ -1,8 +1,9 @@
 import { MongoMemoryServer } from 'mongodb-memory-server'
-import mongoose from 'mongoose'
+import mongoose, { Types } from 'mongoose'
 import * as ApartmentController from './apartment'
 import { Apartment } from '../models/apartment'
-import { createFakeApartment } from '../tests/utils'
+import { Tenant } from '../models/tenant'
+import { createFakeApartment, createFakeTenant } from '../tests/utils'
 
 const mongod = new MongoMemoryServer()
 
@@ -111,6 +112,41 @@ describe(`find`, () => {
     const actual = await ApartmentController.find()
 
     // Assert
-    expect(actual).toMatchObject(apartments)
+    expect(actual).toMatchObject(expect.arrayContaining(apartments.map(expect.objectContaining)))
+  })
+})
+
+describe(`remove`, () => {
+  test(`throws error if apartment not found`, async () => {
+    // Act
+    const actual = ApartmentController.remove(mongoose.Types.ObjectId())
+
+    // Assert
+    await expect(actual).rejects.toThrowErrorMatchingInlineSnapshot(`"ApartmentNotFound"`)
+  })
+
+  test(`apartment and tenants are removed`, async () => {
+    // Arrange
+    const apartment = await Apartment.create(createFakeApartment())
+
+    const tenants = Array(10)
+      .fill(``)
+      .map(() => ({ ...createFakeTenant(), apartmentId: apartment.id }))
+    const tenantsIds = (await Promise.all(tenants.map((tenant) => Tenant.create(tenant)))).map(
+      ({ id }) => id,
+    ) as Types.ObjectId[]
+
+    apartment.tenants = tenantsIds
+    await apartment.save()
+
+    // Act
+    await ApartmentController.remove(apartment.id)
+
+    // Assert
+    const actualApartment = await Apartment.findById(apartment.id)
+    const actualTenants = await Tenant.find({ apartmentId: apartment.id })
+
+    expect(actualApartment).toBeNull()
+    expect(actualTenants.length).toBe(0)
   })
 })
