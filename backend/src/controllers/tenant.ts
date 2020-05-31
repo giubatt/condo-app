@@ -7,12 +7,16 @@ export const create = async ({
   name,
   dateOfBirth,
   phone,
+  primary,
+  apartmentId,
 }: {
   cpf: string
   email: string
   name: string
   dateOfBirth: Date
   phone: string
+  primary: boolean
+  apartmentId: Types.ObjectId
 }): Promise<TenantDocument> => {
   const tenant = await Tenant.create({
     cpf,
@@ -20,6 +24,8 @@ export const create = async ({
     name,
     dateOfBirth,
     phone,
+    primary,
+    apartmentId,
   })
 
   return tenant.toObject()
@@ -32,6 +38,8 @@ export const update = async ({
   name,
   dateOfBirth,
   phone,
+  primary,
+  apartmentId,
 }: {
   id: Types.ObjectId
   cpf?: string
@@ -39,6 +47,8 @@ export const update = async ({
   name?: string
   dateOfBirth?: Date
   phone?: string
+  primary?: boolean
+  apartmentId?: Types.ObjectId
 }): Promise<TenantDocument> => {
   const tenant = await Tenant.findById(id)
   if (!tenant) throw new Error(`TenantNotFound`)
@@ -48,6 +58,8 @@ export const update = async ({
   if (name) tenant.name = name
   if (dateOfBirth) tenant.dateOfBirth = dateOfBirth
   if (phone) tenant.phone = phone
+  if (primary) tenant.primary = primary
+  if (apartmentId) tenant.apartmentId = apartmentId
 
   await tenant.save()
 

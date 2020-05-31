@@ -30,7 +30,7 @@ export const update = async ({
 }
 
 export const findById = async (id: Types.ObjectId): Promise<ApartmentDocument | null> => {
-  const apartment = await Apartment.findById(id).populate(`tenants.tenant`)
+  const apartment = await Apartment.findById(id).populate(`tenants`)
 
   return apartment?.toObject()
 }

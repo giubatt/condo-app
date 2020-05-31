@@ -23,15 +23,8 @@ const apartmentSchema = new mongoose.Schema(
     },
     tenants: [
       {
-        primary: {
-          type: Boolean,
-          default: false,
-        },
-        tenant: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: `Tenant`,
-          required: true,
-        },
+        type: mongoose.Schema.Types.ObjectId,
+        ref: `Tenant`,
       },
     ],
   },

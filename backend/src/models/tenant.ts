@@ -5,14 +5,16 @@ export type TenantDocument = mongoose.Document & {
   email: string
   name: string
   dateOfBirth?: Date
-  phone: string
+  phone?: string
+  primary: boolean
+  apartmentId: mongoose.Types.ObjectId
 }
 
 const tenantSchema = new mongoose.Schema(
   {
     cpf: {
       type: String,
-      unique: true,
+      required: true,
     },
     email: {
       type: String,
@@ -24,6 +26,14 @@ const tenantSchema = new mongoose.Schema(
     },
     dateOfBirth: Date,
     phone: String,
+    primary: {
+      type: Boolean,
+      default: false,
+    },
+    apartmentId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+    },
   },
   { timestamps: true },
 )

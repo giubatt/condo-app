@@ -99,31 +99,18 @@ describe(`findById`, () => {
 
     const apartment = await Apartment.create({
       ...createFakeApartment(),
-      tenants: [
-        {
-          primary: true,
-          tenant: tenants[0].id,
-        },
-        {
-          tenant: tenants[1].id,
-        },
-        {
-          tenant: tenants[2].id,
-        },
-      ],
+      tenants: tenants.map(({ id }) => id),
     })
-
-    const expected = apartment.toObject()
-    expected.tenants = expected.tenants.map((item: { primary: boolean; tenant: Types.ObjectId }) => ({
-      primary: item.primary,
-      tenant: tenants.find(({ id }) => id === item.tenant.toHexString()).toObject(),
-    }))
 
     // Act
     const actual = await ApartmentController.findById(apartment.id)
 
     // Assert
-    expect(actual).toMatchObject(expected)
+    const expected = apartment.toObject()
+    expect(actual).toMatchObject({
+      ...expected,
+      tenants: expect.arrayContaining(tenants.map((tenant) => expect.objectContaining(tenant.toObject()))),
+    })
   })
 
   test(`undefined if apartment doesn't exist`, async () => {
