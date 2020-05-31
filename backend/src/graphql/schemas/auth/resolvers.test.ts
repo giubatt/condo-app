@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 import mongoose from 'mongoose'
 import { createFakeUser } from '../../../tests/utils'
 import * as UserController from '../../../controllers/user'
+import { User } from '../../../models/user'
 
 const mongod = new MongoMemoryServer()
 
@@ -37,6 +38,12 @@ afterAll(async (done) => {
 const LOGIN = gql`
   mutation Login($email: String!, $password: String!) {
     login(email: $email, password: $password)
+  }
+`
+
+const REGISTER = gql`
+  mutation Register($email: String!, $password: String!) {
+    register(email: $email, password: $password)
   }
 `
 
@@ -89,6 +96,29 @@ describe(`Mutation`, () => {
         }
       `)
       expect(data.login).toBeNull()
+    })
+  })
+
+  describe(`register`, () => {
+    test(`user is created and token is returned`, async () => {
+      // Arrange
+      const user = createFakeUser()
+
+      // Act
+      const { data, errors } = await mutate({
+        mutation: REGISTER,
+        variables: {
+          email: user.email,
+          password: user.password,
+        },
+      })
+      const dbUser = await User.find({ email: user.email })
+
+      // Assert
+      expect(errors).toBeUndefined()
+      expect(data.register).not.toBeNull()
+      expect(typeof data.register).toBe(`string`)
+      expect(dbUser).toBeDefined()
     })
   })
 
