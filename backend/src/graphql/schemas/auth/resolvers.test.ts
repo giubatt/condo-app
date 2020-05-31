@@ -121,7 +121,9 @@ describe(`Mutation`, () => {
       expect(dbUser).toBeDefined()
     })
   })
+})
 
+describe(`Query`, () => {
   describe(`checkToken`, () => {
     test(`returns error on invalid token`, async () => {
       // Act
