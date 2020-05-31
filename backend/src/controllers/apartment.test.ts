@@ -1,9 +1,8 @@
 import { MongoMemoryServer } from 'mongodb-memory-server'
-import mongoose, { Types } from 'mongoose'
+import mongoose from 'mongoose'
 import * as ApartmentController from './apartment'
 import { Apartment } from '../models/apartment'
-import { Tenant } from '../models/tenant'
-import { createFakeTenant, createFakeApartment } from '../tests/utils'
+import { createFakeApartment } from '../tests/utils'
 
 const mongod = new MongoMemoryServer()
 
@@ -93,31 +92,25 @@ describe(`findById`, () => {
     expect(actual).toMatchObject(expected.toObject())
   })
 
-  test(`apartment is returned with tenants populated`, async () => {
-    // Arrange
-    const tenants = await Tenant.create(Array(3).fill(``).map(createFakeTenant))
-
-    const apartment = await Apartment.create({
-      ...createFakeApartment(),
-      tenants: tenants.map(({ id }) => id),
-    })
-
-    // Act
-    const actual = await ApartmentController.findById(apartment.id)
-
-    // Assert
-    const expected = apartment.toObject()
-    expect(actual).toMatchObject({
-      ...expected,
-      tenants: expect.arrayContaining(tenants.map((tenant) => expect.objectContaining(tenant.toObject()))),
-    })
-  })
-
   test(`undefined if apartment doesn't exist`, async () => {
     // Act
     const actual = await ApartmentController.findById(mongoose.Types.ObjectId())
 
     // Assert
     expect(actual).toBeUndefined()
+  })
+})
+
+describe(`find`, () => {
+  test(`apartment list is returned`, async () => {
+    // Arrange
+    const apartments = Array(10).fill(``).map(createFakeApartment)
+    await Promise.all(apartments.map((apartment) => Apartment.create(apartment)))
+
+    // Act
+    const actual = await ApartmentController.find()
+
+    // Assert
+    expect(actual).toMatchObject(apartments)
   })
 })
