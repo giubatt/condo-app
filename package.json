@@ -4,7 +4,5 @@
   "license": "MIT",
   "scripts": {},
   "dependencies": {},
-  "devDependencies": {
-    "@types/bcrypt": "^3.0.0"
-  }
+  "devDependencies": {}
 }
