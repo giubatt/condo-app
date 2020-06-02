@@ -1,0 +1,40 @@
+{
+	"Functional Component": {
+		"scope": "typescriptreact",
+		"prefix": "rfc",
+		"body": [
+			"import React from 'react'",
+			"// import styled from '@emotion/styled'",
+			"",
+			"export interface Props {}",
+			"",
+			"const ${1:$TM_FILENAME_BASE}: React.FC<Props> = ({}) => {",
+			"  return (",
+			"    <>",
+			"    </>",
+			"  )",
+			"}",
+			"",
+			"export default ${1:$TM_FILENAME_BASE}",
+			"",
+		]
+	},
+	"Storybook Default": {
+		"scope": "typescriptreact",
+		"prefix": "story",
+		"body": [
+			"import * as React from 'react'",
+			"",
+			"import ${TM_FILENAME/(.*?)\\..+$/$1/} from './${TM_FILENAME/(.*?)\\..+$/$1/}'",
+			"",
+			"export default {",
+			"  title: '${TM_FILENAME/(.*?)\\..+$/$1/}',",
+			"  component: ${TM_FILENAME/(.*?)\\..+$/$1/},",
+			"}",
+			"",
+			"export const example: React.FC = () => {",
+			"  return <${TM_FILENAME/(.*?)\\..+$/$1/} />",
+			"}",
+		]
+	}
+}
