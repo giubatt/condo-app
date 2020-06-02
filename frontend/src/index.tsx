@@ -1,17 +1,17 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import App from './App';
-import './index.css';
+import * as React from 'react'
+import * as ReactDOM from 'react-dom'
+import './index.css'
+import Routes from './routes'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Routes />
   </React.StrictMode>,
-  document.getElementById('root'),
-);
+  document.getElementById(`root`),
+)
 
 // Hot Module Replacement (HMR) - Remove this snippet to remove HMR.
 // Learn more: https://www.snowpack.dev/#hot-module-replacement
 if (import.meta.hot) {
-  import.meta.hot.accept();
+  import.meta.hot.accept()
 }
