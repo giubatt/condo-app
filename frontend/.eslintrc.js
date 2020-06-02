@@ -21,7 +21,6 @@ module.exports = {
   ],
 
   rules: {
-    quotes: [`error`, `backtick`],
     '@typescript-eslint/explicit-function-return-type': [
       `warn`,
       {
