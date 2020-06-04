@@ -1,5 +1,4 @@
 import React from 'react'
-// import styled from '@emotion/styled'
 
 export interface Props
   extends React.DetailedHTMLProps<
@@ -15,7 +14,6 @@ const LabelInput = React.forwardRef(
     { label, error, ...inputProps }: Props,
     ref?: React.Ref<HTMLInputElement>,
   ) => {
-    console.log({ error })
     return (
       <>
         <label
