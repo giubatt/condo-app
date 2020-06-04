@@ -41,8 +41,15 @@
     "typescript": "^3.8.0"
   },
   "dependencies": {
+    "@emotion/core": "^10.0.28",
+    "@emotion/styled": "^10.0.27",
     "@types/react-router-dom": "^5.1.5",
+    "graphql": "^15.0.0",
+    "graphql-tag": "^2.10.3",
+    "react-feather": "^2.0.8",
     "react-hook-form": "^5.7.2",
-    "react-router-dom": "^5.2.0"
+    "react-modal": "^3.11.2",
+    "react-router-dom": "^5.2.0",
+    "urql": "^1.9.7"
   }
 }

@@ -2,10 +2,13 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import './index.css'
 import Routes from './routes'
+import Providers from './providers'
 
 ReactDOM.render(
   <React.StrictMode>
-    <Routes />
+    <Providers>
+      <Routes />
+    </Providers>
   </React.StrictMode>,
   document.getElementById(`root`),
 )

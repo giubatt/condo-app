@@ -4,13 +4,13 @@ import Button from 'src/components/elements/Button'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 
-export interface Props {
-  onSubmit: () => void
-}
-
 type Inputs = {
   email: string
   password: string
+}
+
+export interface Props {
+  onSubmit: (arg0: Inputs) => void
 }
 
 const LoginForm: React.FC<Props> = ({ onSubmit }) => {
