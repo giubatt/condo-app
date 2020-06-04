@@ -3,5 +3,7 @@
   "scripts": {
     "build:css": "postcss"
   },
-  "plugins": []
+  "plugins": [
+    "@snowpack/plugin-dotenv"
+  ]
 }
