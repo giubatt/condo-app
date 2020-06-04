@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "start": "yarn serve",
-    "build": "yarn build-sass && yarn build-ts && yarn lint && yarn copy-static-assets",
+    "build": "yarn lint && yarn build-ts",
     "serve": "node dist/server.js",
     "watch-node": "nodemon dist/server.js",
     "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"yarn watch-ts\" \"yarn watch-node\"",

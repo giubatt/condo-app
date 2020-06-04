@@ -5,7 +5,7 @@ import path from 'path'
 dotenv.config({ path: path.resolve(process.cwd(), `../`, `.env`) })
 
 export const ENVIRONMENT = process.env.NODE_ENV
-export const PORT = process.env[`BACKEND_PORT`] || 5000
+export const PORT = process.env[`BACKEND_PORT`] || 3000
 export const JWT_SECRET = process.env[`BACKEND_JWT_SECRET`]
 export const MONGODB_URI = process.env[`BACKEND_MONGODB_URI`]
 

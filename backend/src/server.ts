@@ -1,4 +1,5 @@
 import app from './app'
 import { PORT } from './utils/secrets'
+import { graphqlServer } from './graphql/server'
 
-app.listen({ port: process.env.PORT }, () => console.log(`🚀 Server ready at http://localhost:${PORT}`))
+app.listen({ port: PORT }, () => console.log(`🚀 Server ready at http://localhost:${PORT}${graphqlServer.graphqlPath}`))

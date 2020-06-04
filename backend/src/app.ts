@@ -7,9 +7,10 @@ mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false,
+  useCreateIndex: true,
 })
 
 const app = express()
-// graphqlServer.applyMiddleware({ app })
+graphqlServer.applyMiddleware({ app })
 
 export default app
