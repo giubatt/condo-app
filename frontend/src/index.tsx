@@ -3,6 +3,9 @@ import * as ReactDOM from 'react-dom'
 import './index.css'
 import Routes from './routes'
 import Providers from './providers'
+import ReactModal from 'react-modal'
+
+ReactModal.setAppElement(document.getElementById('root') as HTMLElement)
 
 ReactDOM.render(
   <React.StrictMode>

@@ -21,16 +21,11 @@ module.exports = {
   ],
 
   rules: {
-    '@typescript-eslint/explicit-function-return-type': [
-      `warn`,
-      {
-        allowTypedFunctionExpressions: true,
-      },
-    ],
     '@typescript-eslint/no-unused-vars': [
       `warn`,
       {
         argsIgnorePattern: `^_`,
+        varsIgnorePattern: `^_`,
       },
     ],
   },
