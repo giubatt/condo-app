@@ -16,6 +16,7 @@ import {
 } from 'src/graphql/mutations'
 import { useQuery, useMutation } from 'urql'
 import { useModals } from 'src/utils/hooks'
+import { useHistory } from 'react-router-dom'
 
 const Layout = styled.div`
   display: grid;
@@ -33,6 +34,8 @@ const Dashboard: React.FC = ({ children }) => {
   const { openModalId, modalProps, openModal, closeModal } = useModals<
     ModalTypes
   >()
+
+  const history = useHistory()
 
   const [_removeRes, removeApartment] = useMutation(REMOVE_APARTMENT)
   const [_createRes, createApartment] = useMutation(CREATE_APARTMENT)
@@ -64,6 +67,9 @@ const Dashboard: React.FC = ({ children }) => {
                   defaultValues: { block, number },
                 })
               }
+              onOpenApartment={(id) => {
+                history.push(`/dashboard/apartamento/${id}`)
+              }}
             />
           )}
         </StyledCard>
