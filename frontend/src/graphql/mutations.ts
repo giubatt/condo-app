@@ -11,3 +11,19 @@ export const REGISTER = gql`
     register(email: $email, password: $password)
   }
 `
+
+export const CREATE_APARTMENT = gql`
+  mutation CreateApartment($number: Int!, $block: String) {
+    createApartment(number: $number, block: $block) {
+      id
+      number
+      block
+    }
+  }
+`
+
+export const REMOVE_APARTMENT = gql`
+  mutation RemoveApartment($id: ID!) {
+    removeApartment(id: $id)
+  }
+`

@@ -1,11 +1,15 @@
 import React from 'react'
 import Card from 'src/components/elements/Card'
 import Button from 'src/components/elements/Button'
+import Modal from 'src/components/elements/Modal'
 import ApartmentList from 'src/components/apartment/List'
+import ApartmentFormModal from 'src/components/apartment/ApartmentFormModal'
 import styled from '@emotion/styled'
 
 import { GET_APARTMENTS } from 'src/graphql/queries'
-import { useQuery } from 'urql'
+import { CREATE_APARTMENT, REMOVE_APARTMENT } from 'src/graphql/mutations'
+import { useQuery, useMutation } from 'urql'
+import { useModals } from 'src/utils/hooks'
 
 const Layout = styled.div`
   display: grid;
@@ -19,6 +23,13 @@ const StyledCard = styled(Card)`
 `
 
 const Dashboard: React.FC = ({ children }) => {
+  type ModalTypes = 'confirmDelete' | 'apartmentForm'
+  const { openModalId, modalProps, openModal, closeModal } = useModals<
+    ModalTypes
+  >()
+
+  const [_removeRes, removeApartment] = useMutation(REMOVE_APARTMENT)
+  const [_createRes, createApartment] = useMutation(CREATE_APARTMENT)
   const [{ data, fetching, error }] = useQuery({
     query: GET_APARTMENTS,
   })
@@ -29,12 +40,46 @@ const Dashboard: React.FC = ({ children }) => {
         <StyledCard>
           <div className="flex justify-between mb-4">
             <h1 className="text-gray-700 text-2xl font-bold">Apartamentos</h1>
-            <Button>Adicionar</Button>
+            <Button onClick={() => openModal('apartmentForm', {})}>
+              Adicionar
+            </Button>
           </div>
-          {fetching ? 'Loading' : <ApartmentList items={data?.getApartments} />}
+          {fetching ? (
+            'Loading'
+          ) : (
+            <ApartmentList
+              items={data?.getApartments}
+              onDelete={(id) => openModal('confirmDelete', { id })}
+              onEdit={console.log}
+            />
+          )}
         </StyledCard>
         <StyledCard>{children}</StyledCard>
       </Layout>
+      {openModalId === 'confirmDelete' && (
+        <Modal
+          title="Excluir apartamento"
+          isOpen
+          onCancel={closeModal}
+          onConfirm={async () => {
+            await removeApartment({ id: modalProps.id })
+            closeModal()
+          }}
+        >
+          Deseja mesmo excluir este apartamento?
+        </Modal>
+      )}
+
+      {openModalId === 'apartmentForm' && (
+        <ApartmentFormModal
+          isOpen
+          onCancel={closeModal}
+          onConfirm={async ({ block, number }) => {
+            await createApartment({ block, number: Number(number) })
+            closeModal()
+          }}
+        />
+      )}
     </div>
   )
 }
