@@ -7,9 +7,11 @@ export interface Props {
     number: number
     block: string
   }[]
+  onDelete: (id: string) => void
+  onEdit: (id: string) => void
 }
 
-const List: React.FC<Props> = ({ items }) => {
+const List: React.FC<Props> = ({ items, onDelete, onEdit }) => {
   return (
     <div className="overflow-y-auto overflow-x-hidden -mr-4">
       <table className="min-w-full">
@@ -37,10 +39,10 @@ const List: React.FC<Props> = ({ items }) => {
               </td>
               <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200 flex">
                 <a href="#" className="text-gray-600 hover:text-gray-900">
-                  <Edit />
+                  <Edit onClick={() => onEdit(id)} />
                 </a>
                 <a href="#" className="text-gray-600 hover:text-gray-900 pl-2">
-                  <Trash2 />
+                  <Trash2 onClick={() => onDelete(id)} />
                 </a>
               </td>
             </tr>
