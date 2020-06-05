@@ -3,11 +3,17 @@ import Card from 'src/components/elements/Card'
 import Button from 'src/components/elements/Button'
 import Modal from 'src/components/elements/Modal'
 import ApartmentList from 'src/components/apartment/List'
-import ApartmentFormModal from 'src/components/apartment/ApartmentFormModal'
+import ApartmentFormModal, {
+  ApartmentFormInputs,
+} from 'src/components/apartment/ApartmentFormModal'
 import styled from '@emotion/styled'
 
 import { GET_APARTMENTS } from 'src/graphql/queries'
-import { CREATE_APARTMENT, REMOVE_APARTMENT } from 'src/graphql/mutations'
+import {
+  CREATE_APARTMENT,
+  REMOVE_APARTMENT,
+  UPDATE_APARTMENT,
+} from 'src/graphql/mutations'
 import { useQuery, useMutation } from 'urql'
 import { useModals } from 'src/utils/hooks'
 
@@ -30,6 +36,7 @@ const Dashboard: React.FC = ({ children }) => {
 
   const [_removeRes, removeApartment] = useMutation(REMOVE_APARTMENT)
   const [_createRes, createApartment] = useMutation(CREATE_APARTMENT)
+  const [_updateRes, updateApartment] = useMutation(UPDATE_APARTMENT)
   const [{ data, fetching, error }] = useQuery({
     query: GET_APARTMENTS,
   })
@@ -50,7 +57,13 @@ const Dashboard: React.FC = ({ children }) => {
             <ApartmentList
               items={data?.getApartments}
               onDelete={(id) => openModal('confirmDelete', { id })}
-              onEdit={console.log}
+              onEdit={({ id, block, number }) =>
+                openModal('apartmentForm', {
+                  id,
+                  isEdit: true,
+                  defaultValues: { block, number },
+                })
+              }
             />
           )}
         </StyledCard>
@@ -75,9 +88,22 @@ const Dashboard: React.FC = ({ children }) => {
           isOpen
           onCancel={closeModal}
           onConfirm={async ({ block, number }) => {
-            await createApartment({ block, number: Number(number) })
+            if (modalProps?.isEdit) {
+              await updateApartment({
+                id: modalProps.id,
+                block,
+                number: Number(number),
+              })
+            } else {
+              await createApartment({
+                block,
+                number: Number(number),
+              })
+            }
             closeModal()
           }}
+          isEdit={modalProps?.isEdit as boolean}
+          defaultValues={modalProps?.defaultValues as ApartmentFormInputs}
         />
       )}
     </div>

@@ -1,14 +1,16 @@
 import React from 'react'
 import { Edit, Trash2 } from 'react-feather'
 
+export type Apartment = {
+  id: string
+  number: number
+  block: string
+}
+
 export interface Props {
-  items?: {
-    id: string
-    number: number
-    block: string
-  }[]
+  items?: Apartment[]
   onDelete: (id: string) => void
-  onEdit: (id: string) => void
+  onEdit: (arg0: Apartment) => void
 }
 
 const List: React.FC<Props> = ({ items, onDelete, onEdit }) => {
@@ -39,7 +41,7 @@ const List: React.FC<Props> = ({ items, onDelete, onEdit }) => {
               </td>
               <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200 flex">
                 <a href="#" className="text-gray-600 hover:text-gray-900">
-                  <Edit onClick={() => onEdit(id)} />
+                  <Edit onClick={() => onEdit({ id, number, block })} />
                 </a>
                 <a href="#" className="text-gray-600 hover:text-gray-900 pl-2">
                   <Trash2 onClick={() => onDelete(id)} />

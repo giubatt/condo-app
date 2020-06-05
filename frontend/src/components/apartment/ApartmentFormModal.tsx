@@ -3,24 +3,34 @@ import LabelInput from 'src/components/elements/LabelInput'
 import Modal from 'src/components/elements/Modal'
 import { useForm } from 'react-hook-form'
 
-type Inputs = {
+export type ApartmentFormInputs = {
   number: number
   block: string
 }
 
 export interface Props {
   isOpen: boolean
+  isEdit: boolean
   onCancel: () => void
-  onConfirm: (arg0: Inputs) => void
+  onConfirm: (arg0: ApartmentFormInputs) => void
+  defaultValues?: ApartmentFormInputs
 }
 
-const ApartmentForm: React.FC<Props> = ({ isOpen, onConfirm, onCancel }) => {
-  const { register, handleSubmit, errors } = useForm<Inputs>()
+const ApartmentForm: React.FC<Props> = ({
+  isOpen,
+  isEdit,
+  onConfirm,
+  onCancel,
+  defaultValues,
+}) => {
+  const { register, handleSubmit, errors } = useForm<ApartmentFormInputs>({
+    defaultValues,
+  })
 
   return (
     <Modal
       confirmButtonText="Salvar"
-      title="Adicionar Apartamento"
+      title={isEdit ? 'Editar Apartamento' : 'Adicionar Apartamento'}
       isOpen={isOpen}
       onCancel={onCancel}
       onConfirm={handleSubmit(onConfirm)}

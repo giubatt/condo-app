@@ -22,6 +22,16 @@ export const CREATE_APARTMENT = gql`
   }
 `
 
+export const UPDATE_APARTMENT = gql`
+  mutation UpdateApartment($id: ID!, $number: Int!, $block: String) {
+    updateApartment(id: $id, number: $number, block: $block) {
+      id
+      number
+      block
+    }
+  }
+`
+
 export const REMOVE_APARTMENT = gql`
   mutation RemoveApartment($id: ID!) {
     removeApartment(id: $id)
