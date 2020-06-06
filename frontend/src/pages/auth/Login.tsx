@@ -1,5 +1,6 @@
 import React from 'react'
 import TitledCard from 'src/components/elements/TitledCard'
+import Alert from 'src/components/elements/Alert'
 import LoginForm from 'src/components/auth/LoginForm'
 
 import { LOGIN } from 'src/graphql/mutations'
@@ -13,15 +14,25 @@ const Login: React.FC = () => {
   return (
     <div className="container w-full h-full mx-auto max-w-xs flex justify-center items-center">
       <TitledCard title="Login">
+        {loginResult?.error?.message.includes('InvalidCredentials') && (
+          <Alert
+            className="mb-3"
+            title="Email ou senha inválidos."
+            description="Tente novamente ou se cadastre."
+          />
+        )}
         <LoginForm
           onSubmit={async ({ email, password }): Promise<void> => {
-            const { data } = await login({ email, password })
-            if (data) {
+            const { data, error } = await login({ email, password })
+            if (data?.login) {
               localStorage.setItem('authToken', data.login)
               history.push('/dashboard')
+            } else {
+              if (error?.message.includes('InvalidCredentials')) {
+              }
             }
           }}
-        ></LoginForm>
+        />
       </TitledCard>
     </div>
   )

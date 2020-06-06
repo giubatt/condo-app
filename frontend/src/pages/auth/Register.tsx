@@ -8,7 +8,7 @@ import { useHistory } from 'react-router-dom'
 
 const Register: React.FC = () => {
   const history = useHistory()
-  const [registerResult, register] = useMutation(REGISTER)
+  const [_registerResult, register] = useMutation(REGISTER)
 
   return (
     <div className="container w-full h-full mx-auto max-w-xs flex justify-center items-center">
@@ -16,7 +16,7 @@ const Register: React.FC = () => {
         <RegisterForm
           onSubmit={async ({ email, password }): Promise<void> => {
             const { data } = await register({ email, password })
-            if (data) {
+            if (data?.register) {
               localStorage.setItem('authToken', data.login)
               history.push('/dashboard')
             }
