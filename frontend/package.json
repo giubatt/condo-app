@@ -5,17 +5,10 @@
     "test": "jest",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
     "lint": "prettier --check \"src/**/*.{js,jsx,ts,tsx}\"",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",
     "@snowpack/app-scripts-react": "^1.1.0",
-    "@storybook/addon-actions": "^5.3.19",
-    "@storybook/addon-links": "^5.3.19",
-    "@storybook/addons": "^5.3.19",
-    "@storybook/preset-typescript": "^3.0.0",
-    "@storybook/react": "^5.3.19",
     "@testing-library/jest-dom": "^5.5.0",
     "@testing-library/react": "^10.0.3",
     "@types/react": "^16.9.35",
