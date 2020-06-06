@@ -23,8 +23,8 @@ export const update = async ({
   const apartment = await Apartment.findById(id)
   if (!apartment) throw new Error(`ApartmentNotFound`)
 
-  if (number) apartment.number = number
-  if (block) apartment.block = block
+  if (number !== undefined) apartment.number = number
+  if (block !== undefined) apartment.block = block
   await apartment.save()
 
   return apartment.toObject()
