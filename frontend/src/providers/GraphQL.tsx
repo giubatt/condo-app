@@ -3,9 +3,10 @@ import { createClient, dedupExchange, fetchExchange, Provider } from 'urql'
 import { cacheExchange, Data } from '@urql/exchange-graphcache'
 
 import { GET_APARTMENTS, GET_APARTMENT_TENANTS } from 'src/graphql/queries'
+import { GRAPHQL_URL } from 'src/config'
 
 const client = createClient({
-  url: import.meta.env.SNOWPACK_PUBLIC_GRAPHQL_URL,
+  url: GRAPHQL_URL,
   exchanges: [
     dedupExchange,
     cacheExchange({
