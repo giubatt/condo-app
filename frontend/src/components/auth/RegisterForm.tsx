@@ -3,7 +3,12 @@ import LabelInput from 'src/components/elements/LabelInput'
 import Button from 'src/components/elements/Button'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
+import * as yup from 'yup'
 
+const FormSchema = yup.object().shape({
+  email: yup.string().email('Email inválido').required('Obrigatório'),
+  password: yup.string().required('Obrigatório'),
+})
 type Inputs = {
   email: string
   password: string
@@ -14,7 +19,9 @@ export interface Props {
 }
 
 const LoginForm: React.FC<Props> = ({ onSubmit }) => {
-  const { register, handleSubmit, errors } = useForm<Inputs>()
+  const { register, handleSubmit, errors } = useForm<Inputs>({
+    validationSchema: FormSchema,
+  })
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -26,7 +33,7 @@ const LoginForm: React.FC<Props> = ({ onSubmit }) => {
           placeholder="Email"
           label="Email"
           error={errors?.email?.message as string}
-          ref={register({ required: 'Campo obrigatório' })}
+          ref={register}
         />
       </div>
       <div className="mb-6">
@@ -37,7 +44,7 @@ const LoginForm: React.FC<Props> = ({ onSubmit }) => {
           placeholder="****************"
           label="Password"
           error={errors?.password?.message as string}
-          ref={register({ required: 'Campo obrigatório' })}
+          ref={register}
         />
       </div>
       <div className="flex items-center justify-between">
