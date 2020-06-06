@@ -87,3 +87,27 @@ describe(`findById`, () => {
     expect(actual).toBeUndefined()
   })
 })
+
+describe(`remove`, () => {
+  test(`throws error if tenant not found`, async () => {
+    // Act
+    const actual = TenantController.remove(mongoose.Types.ObjectId())
+
+    // Assert
+    await expect(actual).rejects.toThrowErrorMatchingInlineSnapshot(`"TenantNotFound"`)
+  })
+
+  test(`tenant is removed`, async () => {
+    // Arrange
+    const tenant = await Tenant.create(createFakeTenant())
+    await tenant.save()
+
+    // Act
+    await TenantController.remove(tenant.id)
+
+    // Assert
+    const actualTenant = await Tenant.findById(tenant.id)
+
+    expect(actualTenant).toBeNull()
+  })
+})

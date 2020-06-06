@@ -13,8 +13,8 @@ export const create = async ({
   cpf: string
   email: string
   name: string
-  dateOfBirth: Date
-  phone: string
+  dateOfBirth?: Date
+  phone?: string
   primary: boolean
   apartmentId: Types.ObjectId
 }): Promise<TenantDocument> => {
@@ -70,4 +70,12 @@ export const findById = async (id: Types.ObjectId): Promise<TenantDocument | nul
   const tenant = await Tenant.findById(id)
 
   return tenant?.toObject()
+}
+
+export const remove = async (id: Types.ObjectId): Promise<boolean> => {
+  const tenant = await Tenant.findById(id)
+  if (!tenant) throw new Error(`TenantNotFound`)
+
+  await Tenant.deleteOne({ _id: id })
+  return true
 }
