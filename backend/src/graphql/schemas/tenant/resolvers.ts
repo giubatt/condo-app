@@ -1,32 +1,117 @@
-// import { AuthenticationError } from 'apollo-server-express'
-// import { BaseContext } from 'apollo-server-types'
-// import { login } from '../../../controllers/auth'
-// import { create } from '../../../controllers/user'
-// import { UserDocument } from '../../../models/user'
+import { AuthenticationError } from 'apollo-server-express'
+import * as TenantController from '../../../controllers/tenant'
+import { TenantDocument } from '../../../models/tenant'
+import { UserDocument } from '../../../models/user'
+import { Types } from 'mongoose'
 
 export const resolvers = {
   Mutation: {
-    // async login(
-    //   _parent: undefined,
-    //   { email, password }: { email: string; password: string },
-    //   _ctx: BaseContext,
-    // ): Promise<string | null> {
-    //   return login({ email, password })
-    // },
-    // async register(
-    //   _parent: undefined,
-    //   { email, password }: { email: string; password: string },
-    //   _ctx: BaseContext,
-    // ): Promise<string | null> {
-    //   await create({ email, password })
-    //   return login({ email, password })
-    // },
+    async createTenant(
+      _parent: undefined,
+      {
+        cpf,
+        email,
+        name,
+        primary,
+        dateOfBirth,
+        phone,
+        apartmentId,
+      }: {
+        cpf: string
+        email: string
+        name: string
+        primary: boolean
+        dateOfBirth?: Date
+        phone?: string
+        apartmentId: Types.ObjectId
+      },
+      { user }: { user: UserDocument },
+    ): Promise<TenantDocument | null> {
+      if (!user) throw new AuthenticationError(``)
+
+      return await TenantController.create({
+        cpf,
+        email,
+        name,
+        primary,
+        dateOfBirth,
+        phone,
+        apartmentId,
+      })
+    },
+
+    async updateTenant(
+      _parent: undefined,
+      {
+        id,
+        cpf,
+        email,
+        name,
+        primary,
+        dateOfBirth,
+        phone,
+        apartmentId,
+      }: {
+        id: Types.ObjectId
+        cpf: string
+        email: string
+        name: string
+        primary: boolean
+        dateOfBirth?: Date
+        phone?: string
+        apartmentId: Types.ObjectId
+      },
+      { user }: { user: UserDocument },
+    ): Promise<TenantDocument | null> {
+      if (!user) throw new AuthenticationError(``)
+
+      return await TenantController.update({
+        id,
+        cpf,
+        email,
+        name,
+        primary,
+        dateOfBirth,
+        phone,
+        apartmentId,
+      })
+    },
+
+    async removeTenant(
+      _parent: undefined,
+      { id }: { id: Types.ObjectId },
+      { user }: { user: UserDocument },
+    ): Promise<boolean | null> {
+      if (!user) throw new AuthenticationError(``)
+
+      return await TenantController.remove(id)
+    },
   },
 
   Query: {
-    // checkToken(_parent: undefined, {}, { user }: { user: UserDocument }): boolean | null {
-    //   if (!user) throw new AuthenticationError(``)
-    //   return true
-    // },
+    async getTenant(
+      _parent: undefined,
+      { id }: { id: Types.ObjectId },
+      { user }: { user: UserDocument },
+    ): Promise<TenantDocument | null> {
+      if (!user) throw new AuthenticationError(``)
+
+      return await TenantController.findById(id)
+    },
+    async getApartmentTenants(
+      _parent: undefined,
+      { apartmentId }: { apartmentId: Types.ObjectId },
+      { user }: { user: UserDocument },
+    ): Promise<TenantDocument[] | null> {
+      if (!user) throw new AuthenticationError(``)
+
+      return await TenantController.findByApartmentId(apartmentId)
+    },
+  },
+
+  Tenant: {
+    id(_parent: { _id: Types.ObjectId }): string {
+      return _parent._id.toHexString()
+    },
   },
 }

@@ -7,20 +7,38 @@ export const typeDefs = gql`
     email: String!
     name: String!
     primary: Boolean!
-    dateOfBirth: Date
+    dateOfBirth: DateTime
     phone: String
-  }
-
-  extend type Apartment {
-    tenants: [Tenant]
+    apartmentId: String!
   }
 
   extend type Mutation {
-    createTenant: Tenant
-    updateTenant: Tenant
+    createTenant(
+      cpf: String!
+      email: String!
+      name: String!
+      primary: Boolean!
+      dateOfBirth: DateTime
+      phone: String
+      apartmentId: String!
+    ): Tenant
+
+    updateTenant(
+      id: ID!
+      cpf: String
+      email: String
+      name: String
+      primary: Boolean
+      dateOfBirth: DateTime
+      phone: String
+      apartmentId: String
+    ): Tenant
+
+    removeTenant(id: ID!): Boolean
   }
 
   extend type Query {
     getTenant(id: ID!): Tenant
+    getApartmentTenants(apartmentId: ID!): [Tenant]
   }
 `
