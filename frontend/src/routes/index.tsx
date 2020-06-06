@@ -10,7 +10,7 @@ const Routes: React.FC = () => {
     <BrowserRouter>
       <Switch>
         <Route exact path="/">
-          <Redirect to="/dashboard"></Redirect>
+          <Redirect to="/login"></Redirect>
         </Route>
         <Route path="/login">
           <LoginPage />
