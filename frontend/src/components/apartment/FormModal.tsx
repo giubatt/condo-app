@@ -2,6 +2,15 @@ import React from 'react'
 import LabelInput from 'src/components/elements/LabelInput'
 import Modal from 'src/components/elements/Modal'
 import { useForm } from 'react-hook-form'
+import * as yup from 'yup'
+
+const FormSchema = yup.object().shape({
+  number: yup
+    .number()
+    .required('Preencha o número do apartamento')
+    .typeError('Preencha o número do apartamento'),
+  block: yup.string().required('Preencha o bloco do apartamento'),
+})
 
 export type ApartmentFormInputs = {
   number: number
@@ -16,7 +25,7 @@ export interface Props {
   defaultValues?: ApartmentFormInputs
 }
 
-const ApartmentForm: React.FC<Props> = ({
+const ApartmentFormModal: React.FC<Props> = ({
   isOpen,
   isEdit,
   onConfirm,
@@ -25,6 +34,7 @@ const ApartmentForm: React.FC<Props> = ({
 }) => {
   const { register, handleSubmit, errors } = useForm<ApartmentFormInputs>({
     defaultValues,
+    validationSchema: FormSchema,
   })
 
   return (
@@ -44,7 +54,7 @@ const ApartmentForm: React.FC<Props> = ({
             placeholder="Preencha o número"
             label="Número"
             error={errors?.number?.message as string}
-            ref={register({ required: 'Preencha o número do apartamento' })}
+            ref={register}
           />
         </div>
         <div className="mb-6">
@@ -55,7 +65,7 @@ const ApartmentForm: React.FC<Props> = ({
             placeholder="Preencha o bloco"
             label="Block"
             error={errors?.block?.message as string}
-            ref={register({ required: 'Preencha o bloco do apartamento' })}
+            ref={register}
           />
         </div>
         <button type="submit" className="absolute hidden"></button>
@@ -64,4 +74,4 @@ const ApartmentForm: React.FC<Props> = ({
   )
 }
 
-export default ApartmentForm
+export default ApartmentFormModal
