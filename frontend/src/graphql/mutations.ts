@@ -37,3 +37,73 @@ export const REMOVE_APARTMENT = gql`
     removeApartment(id: $id)
   }
 `
+
+export const CREATE_TENANT = gql`
+  mutation CreateTenant(
+    $cpf: String!
+    $email: String!
+    $name: String!
+    $primary: Boolean!
+    $dateOfBirth: DateTime
+    $phone: String
+    $apartmentId: String!
+  ) {
+    createTenant(
+      cpf: $cpf
+      email: $email
+      name: $name
+      primary: $primary
+      dateOfBirth: $dateOfBirth
+      phone: $phone
+      apartmentId: $apartmentId
+    ) {
+      id
+      cpf
+      email
+      name
+      primary
+      dateOfBirth
+      phone
+      apartmentId
+    }
+  }
+`
+
+export const UPDATE_TENANT = gql`
+  mutation UpdateTenant(
+    $id: ID!
+    $cpf: String
+    $email: String
+    $name: String
+    $primary: Boolean
+    $dateOfBirth: DateTime
+    $phone: String
+    $apartmentId: String
+  ) {
+    updateTenant(
+      id: $id
+      cpf: $cpf
+      email: $email
+      name: $name
+      primary: $primary
+      dateOfBirth: $dateOfBirth
+      phone: $phone
+      apartmentId: $apartmentId
+    ) {
+      id
+      cpf
+      email
+      name
+      primary
+      dateOfBirth
+      phone
+      apartmentId
+    }
+  }
+`
+
+export const REMOVE_TENANT = gql`
+  mutation RemoveTenant($id: ID!) {
+    removeTenant(id: $id)
+  }
+`
