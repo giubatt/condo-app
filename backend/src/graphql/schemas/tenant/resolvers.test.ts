@@ -133,13 +133,13 @@ describe(`Mutation`, () => {
     const UPDATE_TENANT = gql`
       mutation UpdateTenant(
         $id: ID!
-        $cpf: String!
-        $email: String!
-        $name: String!
-        $primary: Boolean!
+        $cpf: String
+        $email: String
+        $name: String
+        $primary: Boolean
         $dateOfBirth: DateTime
         $phone: String
-        $apartmentId: String!
+        $apartmentId: String
       ) {
         updateTenant(
           id: $id
