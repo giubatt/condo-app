@@ -5,8 +5,8 @@ services:
         image: condo-app-backend
         restart: always
         environment:
-          MONGODB_URI: mongodb+srv://admin:SZY1giyttkwdIZdN@cluster0-w6bz9.mongodb.net/condo-test
-          JWT_SECRET: u5hW7EkCFr4HP32Y@y
+          MONGODB_URI: 
+          JWT_SECRET: 
         ports:
             - "3010:3000"
 
