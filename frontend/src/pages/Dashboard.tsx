@@ -5,7 +5,7 @@ import Modal from 'src/components/elements/Modal'
 import ApartmentList from 'src/components/apartment/List'
 import ApartmentFormModal, {
   ApartmentFormInputs,
-} from 'src/components/apartment/ApartmentFormModal'
+} from 'src/components/apartment/FormModal'
 import styled from '@emotion/styled'
 
 import { GET_APARTMENTS } from 'src/graphql/queries'
@@ -16,7 +16,7 @@ import {
 } from 'src/graphql/mutations'
 import { useQuery, useMutation } from 'urql'
 import { useModals } from 'src/utils/hooks'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useRouteMatch } from 'react-router-dom'
 
 const Layout = styled.div`
   display: grid;
@@ -36,11 +36,15 @@ const Dashboard: React.FC = ({ children }) => {
   >()
 
   const history = useHistory()
+  const match = useRouteMatch<{ apartmentId: string }>({
+    path: '/dashboard/apartamento/:apartmentId',
+  })
+  const selectedApartmentId = match?.params?.apartmentId
 
   const [_removeRes, removeApartment] = useMutation(REMOVE_APARTMENT)
   const [_createRes, createApartment] = useMutation(CREATE_APARTMENT)
   const [_updateRes, updateApartment] = useMutation(UPDATE_APARTMENT)
-  const [{ data, fetching, error }] = useQuery({
+  const [{ data, fetching }] = useQuery({
     query: GET_APARTMENTS,
   })
 
@@ -70,6 +74,7 @@ const Dashboard: React.FC = ({ children }) => {
               onOpenApartment={(id) => {
                 history.push(`/dashboard/apartamento/${id}`)
               }}
+              selectedId={selectedApartmentId}
             />
           )}
         </StyledCard>
