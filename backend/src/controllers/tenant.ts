@@ -53,17 +53,24 @@ export const update = async ({
   const tenant = await Tenant.findById(id)
   if (!tenant) throw new Error(`TenantNotFound`)
 
-  if (cpf) tenant.cpf = cpf
-  if (email) tenant.email = email
-  if (name) tenant.name = name
-  if (dateOfBirth) tenant.dateOfBirth = dateOfBirth
-  if (phone) tenant.phone = phone
-  if (primary) tenant.primary = primary
-  if (apartmentId) tenant.apartmentId = apartmentId
+  if (cpf !== undefined) tenant.cpf = cpf
+  if (email !== undefined) tenant.email = email
+  if (name !== undefined) tenant.name = name
+  if (dateOfBirth !== undefined) tenant.dateOfBirth = dateOfBirth
+  if (phone !== undefined) tenant.phone = phone
+  if (primary !== undefined) tenant.primary = primary
+  if (apartmentId !== undefined) tenant.apartmentId = apartmentId
 
   await tenant.save()
 
   return tenant.toObject()
+}
+
+export const findByApartmentId = async (apartmentId: Types.ObjectId): Promise<TenantDocument[] | null> => {
+  let tenants = await Tenant.find({ apartmentId })
+  tenants = tenants.map((item) => item.toObject())
+
+  return tenants
 }
 
 export const findById = async (id: Types.ObjectId): Promise<TenantDocument | null> => {

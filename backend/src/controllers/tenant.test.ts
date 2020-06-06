@@ -88,6 +88,24 @@ describe(`findById`, () => {
   })
 })
 
+describe(`findByApartmentId`, () => {
+  test(`tenant is returned`, async () => {
+    // Arrange
+    const apartmentId = mongoose.Types.ObjectId()
+
+    const tenants = Array(12)
+      .fill(``)
+      .map(() => ({ ...createFakeTenant(), apartmentId }))
+    await Promise.all(tenants.map((data) => Tenant.create(data)))
+
+    // Act
+    const actual = await TenantController.findByApartmentId(apartmentId)
+
+    // Assert
+    expect(actual).toMatchObject(tenants)
+  })
+})
+
 describe(`remove`, () => {
   test(`throws error if tenant not found`, async () => {
     // Act
