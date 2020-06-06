@@ -1,3 +1,28 @@
+
+# How to run with Docker
+
+#### Environment Variables
+Add the environment variables values to the docker-compose:
+
+`MONGODB_URI`: MongoDB URI String
+
+`JWT_SECRET`: Secret string used to sign JWTs
+
+---
+
+To run both the backend and frontend, just build each image with:
+
+```
+docker build -t condo-app-backend ./backend
+docker build -t condo-app-frontend ./frontend
+```
+
+
+Then run `docker-compose up` to run everything.
+
+Alternativelly, just run the shell script `build-run.compose.sh` and it will do everything automatically.
+
+
 # How to run locally
 
 ## Backend
@@ -60,27 +85,3 @@ To build the frontend project for production, run:
 ```
 yarn build
 ```
-
-# How to run with Docker
-
-#### Environment Variables
-Add the environment variables values to the docker-compose:
-
-`MONGODB_URI`: MongoDB URI String
-
-`JWT_SECRET`: Secret string used to sign JWTs
-
----
-
-To run both the backend and frontend, just build each image with:
-
-```
-docker build -t condo-app-backend ./backend
-docker build -t condo-app-frontend ./frontend
-```
-
-
-Then run `docker-compose up` to run everything.
-
-Alternativelly, just run the shell script `build-run.compose.sh` and it will do everything automatically.
-
